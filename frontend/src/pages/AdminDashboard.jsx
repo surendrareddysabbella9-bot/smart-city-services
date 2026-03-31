@@ -86,11 +86,14 @@ function AdminDashboard() {
     }
   };
 
+  const [roleFilter, setRoleFilter] = useState('All');
+  
   const activeFlagged = flaggedWorkers.filter(w => !dismissedIds.includes(w.id));
 
   const filteredUsers = users.filter(u => 
-    (u.email || '').toLowerCase().includes(search.toLowerCase()) || 
-    (u.role || '').toLowerCase().includes(search.toLowerCase())
+    ((u.email || '').toLowerCase().includes(search.toLowerCase()) || 
+    (u.role || '').toLowerCase().includes(search.toLowerCase())) &&
+    (roleFilter === 'All' || u.role === roleFilter)
   );
 
   return (
@@ -166,55 +169,83 @@ function AdminDashboard() {
       </div>
 
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h2 style={{ margin: 0 }}>All Users</h2>
-          <div style={{ position: 'relative', minWidth: '300px' }}>
-            <FaSearch style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-light)' }} />
-            <input 
-              type="text" 
-              placeholder="Search by Email or Role..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              style={{ width: '100%', padding: '0.65rem 1rem 0.65rem 2.8rem', border: '1px solid var(--border)', borderRadius: '6px' }}
-            />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <h2 style={{ margin: 0 }}>Registered Network Base</h2>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', background: '#f1f5f9', padding: '0.35rem', borderRadius: '8px', gap: '0.25rem' }}>
+              {['All', 'Worker', 'Customer'].map(role => (
+                 <button 
+                    key={role}
+                    onClick={() => setRoleFilter(role)}
+                    style={{ 
+                      padding: '0.5rem 1.5rem', 
+                      borderRadius: '6px', 
+                      border: 'none', 
+                      background: roleFilter === role ? 'white' : 'transparent', 
+                      color: roleFilter === role ? '#0f172a' : '#64748b', 
+                      fontWeight: '700', 
+                      cursor: 'pointer',
+                      boxShadow: roleFilter === role ? '0 2px 4px rgba(0,0,0,0.05)' : 'none'
+                    }}>
+                   {role === 'All' ? 'All Directory' : `${role}s`}
+                 </button>
+              ))}
+            </div>
+            <div style={{ position: 'relative', minWidth: '300px' }}>
+              <FaSearch style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-light)' }} />
+              <input 
+                type="text" 
+                placeholder="Search by directory..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{ width: '100%', padding: '0.65rem 1rem 0.65rem 2.8rem', border: '1px solid var(--border)', borderRadius: '6px' }}
+              />
+            </div>
           </div>
         </div>
-        <div style={{ overflowX: 'auto', background: 'white', borderRadius: '8px', border: '1px solid var(--border)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border)' }}>
-                <th style={{ padding: '1rem' }}>Name</th>
-                <th style={{ padding: '1rem' }}>Email</th>
-                <th style={{ padding: '1rem' }}>Role</th>
-                <th style={{ padding: '1rem' }}>Joined</th>
-                <th style={{ padding: '1rem', textAlign: 'right' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map(u => (
-                <tr key={u.id} style={{ borderBottom: '1px solid var(--border)', animation: 'fadeIn 0.3s ease-out' }}>
-                  <td style={{ padding: '1rem' }}><strong>{u.name}</strong></td>
-                  <td style={{ padding: '1rem', color: 'var(--text-light)' }}>{u.email}</td>
-                  <td style={{ padding: '1rem' }}><span className={`badge ${u.role.toLowerCase()}`}>{u.role}</span></td>
-                  <td style={{ padding: '1rem', fontSize: '0.9rem' }}>{new Date(u.created_at).toLocaleDateString()}</td>
-                  <td style={{ padding: '1rem', textAlign: 'right' }}>
-                    {u.id !== currentUser.id ? (
-                      <button 
-                        onClick={() => handleDeleteUser(u)} 
-                        className="btn btn-danger" 
-                        style={{ padding: '0.45rem 1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
-                      >
-                        <FaTrash /> Delete
-                      </button>
-                    ) : (
-                      <span style={{ color: 'var(--text-light)', fontSize: '0.8rem', fontStyle: 'italic' }}>Protected Administrator</span>
-                    )}
-                  </td>
+        
+        {filteredUsers.length > 0 ? (
+          <div style={{ overflowX: 'auto', background: 'white', borderRadius: '8px', border: '1px solid var(--border)' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '1rem' }}>Name</th>
+                  <th style={{ padding: '1rem' }}>Email</th>
+                  <th style={{ padding: '1rem' }}>Role Status</th>
+                  <th style={{ padding: '1rem' }}>Join Vector</th>
+                  <th style={{ padding: '1rem', textAlign: 'right' }}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filteredUsers.map(u => (
+                  <tr key={u.id} style={{ borderBottom: '1px solid var(--border)', animation: 'fadeIn 0.3s ease-out' }}>
+                    <td style={{ padding: '1rem' }}><strong>{u.name}</strong></td>
+                    <td style={{ padding: '1rem', color: 'var(--text-light)' }}>{u.email}</td>
+                    <td style={{ padding: '1rem' }}><span className={`badge ${u.role.toLowerCase()}`}>{u.role}</span></td>
+                    <td style={{ padding: '1rem', fontSize: '0.9rem' }}>{new Date(u.created_at).toLocaleDateString()}</td>
+                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                      {u.id !== currentUser.id ? (
+                        <button 
+                          onClick={() => handleDeleteUser(u)} 
+                          className="btn btn-danger" 
+                          style={{ padding: '0.45rem 1rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                        >
+                          <FaTrash /> Purge
+                        </button>
+                      ) : (
+                        <span style={{ color: 'var(--text-light)', fontSize: '0.8rem', fontStyle: 'italic' }}>Protected Node</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div style={{ padding: '3rem', textAlign: 'center', background: '#f8fafc', borderRadius: '16px', border: '1px dashed #cbd5e1' }}>
+             <p style={{ color: '#64748b' }}>No identities found matching the selected query and directory bounds.</p>
+          </div>
+        )}
       </div>
     </div>
   );
