@@ -15,8 +15,19 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    // Render Free Tier cold-start UX improvement
+    const slowLoadingTimeout = setTimeout(() => {
+      import('react-toastify').then(({ toast }) => {
+         toast.info('Waking up the secure server... This may take up to 30s on the first attempt.', { autoClose: false, toastId: 'cold-start' });
+      });
+    }, 4000);
+
     try {
       const res = await api.post('/auth/login', { email, password });
+      clearTimeout(slowLoadingTimeout);
+      import('react-toastify').then(({ toast }) => toast.dismiss('cold-start'));
+      
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       const user = res.data.user;
@@ -24,6 +35,8 @@ function Login() {
       else if (user.role === 'Worker') navigate('/dashboard/worker');
       else navigate('/dashboard/customer');
     } catch (err) {
+      clearTimeout(slowLoadingTimeout);
+      import('react-toastify').then(({ toast }) => toast.dismiss('cold-start'));
       setError(err.response?.data?.error || err.response?.data?.message || 'Authentication sequence failed.');
     } finally {
       setLoading(false);

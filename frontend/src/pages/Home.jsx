@@ -61,21 +61,21 @@ function Home() {
 
       {/* Service Grid - Rapido Category Style */}
       <div style={{ maxWidth: '1000px', margin: '-4rem auto 4rem', padding: '0 2rem', position: 'relative', zIndex: 10 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1.5rem', background: 'white', padding: '2rem', borderRadius: '32px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', background: 'white', padding: '2.5rem', borderRadius: '32px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6' }}>
           {services.map((s, i) => (
             <div 
               key={i} 
               onClick={() => navigate(s.name === 'All Services' ? '/workers' : `/workers?category=${encodeURIComponent(s.name)}`)}
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', cursor: 'pointer', transition: 'all 0.2s ease' }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', cursor: 'pointer', transition: 'all 0.2s ease', padding: '1rem' }}
               onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'}
               onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
             >
-              <div style={{ width: '80px', height: '80px', background: s.color, borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.75rem', color: s.iconColor, boxShadow: `0 8px 16px ${s.color}66` }}>
+              <div style={{ width: '85px', height: '85px', background: s.color, borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: s.iconColor, boxShadow: `0 8px 16px ${s.color}66` }}>
                 {s.icon}
               </div>
               <div style={{ textAlign: 'center' }}>
-                <h3 style={{ fontSize: '0.95rem', fontWeight: '800', color: '#111827', margin: 0 }}>{s.name}</h3>
-                <span style={{ fontSize: '0.75rem', color: '#6B7280', fontWeight: '600' }}>{s.pros}</span>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#111827', margin: 0 }}>{s.name}</h3>
+                <span style={{ fontSize: '0.8rem', color: '#6B7280', fontWeight: '600' }}>{s.pros}</span>
               </div>
             </div>
           ))}
