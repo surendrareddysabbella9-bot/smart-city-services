@@ -162,8 +162,8 @@ export const updateBookingStatus = async (req, res) => {
       if (booking) {
         await client.query(`
           INSERT INTO job_history (worker_id, booking_id, service_type)
-          VALUES ($1, $2, $3)
-          ON CONFLICT DO NOTHING
+          SELECT $1, $2, $3
+          WHERE NOT EXISTS (SELECT 1 FROM job_history WHERE booking_id = $2)
         `, [booking.worker_id, id, booking.service_type]);
 
         const totalAcceptedRes = await client.query(`SELECT COUNT(*) as count FROM Bookings WHERE worker_id = $1 AND status != 'Pending'`, [booking.worker_id]);
@@ -177,7 +177,7 @@ export const updateBookingStatus = async (req, res) => {
         
         await client.query(`
           UPDATE Workers 
-          SET total_jobs = $1, completion_rate = $2, trust_score = LEAST(trust_score + $3, 100)
+          SET total_jobs = $1, completion_rate = $2, trust_score = LEAST((trust_score + $3::numeric), 100.0)
           WHERE id = $4
         `, [totalCompleted, completionRate, trustChange, booking.worker_id]);
       }

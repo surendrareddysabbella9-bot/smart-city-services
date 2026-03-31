@@ -15,7 +15,11 @@ export const getWorkers = async (req, res, next) => {
     // Add distance calculation if coordinates are provided
     if (lat && lng) {
       selectClause += `, 
-        (6371 * acos(cos(radians($1)) * cos(radians(w.latitude)) * cos(radians(w.longitude) - radians($2)) + sin(radians($1)) * sin(radians(w.latitude)))) AS distance
+        (6371 * acos(
+          LEAST(1.0, GREATEST(-1.0, 
+            cos(radians($1)) * cos(radians(w.latitude)) * cos(radians(w.longitude) - radians($2)) + sin(radians($1)) * sin(radians(w.latitude))
+          ))
+        )) AS distance
       `;
     }
 
@@ -33,14 +37,17 @@ export const getWorkers = async (req, res, next) => {
     `;
     
     const params = [];
+    const countParams = [];
+
     if (lat && lng) {
       params.push(lat, lng);
     }
 
     if (category) {
-      query += ` AND w.category = $${params.length + 1}`;
-      countQuery += ` AND w.category = $${params.length + 1}`;
       params.push(category);
+      countParams.push(category);
+      query += ` AND w.category = $${params.length}`;
+      countQuery += ` AND w.category = $${countParams.length}`;
     }
     
     query += ` ORDER BY `;
@@ -53,7 +60,7 @@ export const getWorkers = async (req, res, next) => {
       w.total_jobs DESC
       LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
 
-    const countRes = await pool.query(countQuery, params.slice(0, category ? (lat && lng ? 3 : 1) : (lat && lng ? 2 : 0)));
+    const countRes = await pool.query(countQuery, countParams);
     const workersResult = await pool.query(query, [...params, limit, offset]);
     const workers = workersResult.rows;
     const total = parseInt(countRes.rows[0].count);
