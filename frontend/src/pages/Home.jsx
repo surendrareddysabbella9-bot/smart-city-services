@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaShieldAlt, FaBriefcase, FaUserCheck, FaMapMarkerAlt, FaStar } from 'react-icons/fa';
+import { FaSearch, FaMapMarkerAlt, FaBolt, FaWrench, FaBrush, FaHammer, FaHardHat, FaUserCheck, FaChevronRight, FaStar, FaShieldAlt } from 'react-icons/fa';
 
 function Home() {
   const [search, setSearch] = useState('');
@@ -13,142 +13,134 @@ function Home() {
     else navigate('/workers');
   };
 
-  const stats = [
-    { icon: <FaUserCheck size={24} color="#10b981" />, value: '15,000+', label: 'Verified Professionals' },
-    { icon: <FaStar size={24} color="#f59e0b" />, value: '4.8/5', label: 'Average Trust Rating' },
-    { icon: <FaShieldAlt size={24} color="#3b82f6" />, value: '100%', label: 'Secure Payments' },
-    { icon: <FaBriefcase size={24} color="#8b5cf6" />, value: '250k+', label: 'Jobs Completed' }
-  ];
-
   const services = [
-    { name: 'Electrician', pros: '342 Verified Pros', rate: 'Starting at $45/hr' },
-    { name: 'Plumber', pros: '289 Verified Pros', rate: 'Starting at $50/hr' },
-    { name: 'Painter', pros: '156 Verified Pros', rate: 'Starting at $35/hr' },
-    { name: 'Maintenance Worker', pros: '410 Verified Pros', rate: 'Starting at $30/hr' },
-    { name: 'Construction Worker', pros: '190 Verified Pros', rate: 'Starting at $60/hr' },
-    { name: 'Cleaning Services', pros: '520 Verified Pros', rate: 'Starting at $25/hr' }
+    { name: 'Electrician', icon: <FaBolt />, color: '#FEF3C7', iconColor: '#D97706', pros: '342 Verified' },
+    { name: 'Plumber', icon: <FaWrench />, color: '#DBEAFE', iconColor: '#2563EB', pros: '289 Verified' },
+    { name: 'Painter', icon: <FaBrush />, color: '#FCE7F3', iconColor: '#DB2777', pros: '156 Verified' },
+    { name: 'Maintenance', icon: <FaHardHat />, color: '#DCFCE7', iconColor: '#059669', pros: '410 Verified' },
+    { name: 'Construction', icon: <FaHammer />, color: '#F3E8FF', iconColor: '#9333EA', pros: '190 Verified' },
+    { name: 'All Services', icon: <FaChevronRight />, color: '#F3F4F6', iconColor: '#374151', pros: 'Explore' }
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f8fafc' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#FFFFFF' }}>
       
-      {/* Hero Section */}
-      <div style={{ background: user?.role === 'Admin' ? 'linear-gradient(135deg, #0f172a, #334155)' : 'linear-gradient(135deg, #1e3a8a, #4338ca)', color: 'white', padding: '6rem 2rem', textAlign: 'center' }}>
-        {user?.role === 'Admin' ? (
-          <div style={{ maxWidth: '900px', margin: '0 auto', animation: 'fadeIn 0.5s ease-out' }}>
-            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1.5rem', color: '#f8fafc' }}>System Health Override</h1>
-            <p style={{ fontSize: '1.2rem', color: '#cbd5e1', marginBottom: '3rem' }}>Administrative telemetry and active negative review intercepts.</p>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-               <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
-                 <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#10b981' }}>248</h2>
-                 <span style={{ fontSize: '0.95rem', fontWeight: 'bold', textTransform: 'uppercase', tracking: '0.05em' }}>Total Active Contracts</span>
-               </div>
-               <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.2)' }}>
-                 <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#3b82f6' }}>12</h2>
-                 <span style={{ fontSize: '0.95rem', fontWeight: 'bold', textTransform: 'uppercase', tracking: '0.05em' }}>New Signups Today</span>
-               </div>
-               <div style={{ background: 'rgba(239,68,68,0.2)', padding: '2rem', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.5)', cursor: 'pointer' }} onClick={() => navigate('/dashboard/admin')}>
-                 <h2 style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', color: '#fca5a5' }}>3</h2>
-                 <span style={{ fontSize: '0.95rem', fontWeight: 'bold', textTransform: 'uppercase', tracking: '0.05em', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>Flagged Reviews <span style={{ background: '#ef4444', color: 'white', padding: '0.1rem 0.5rem', borderRadius: '12px', fontSize: '0.75rem' }}>Action Req</span></span>
-               </div>
-            </div>
+      {/* Hero Section - Rapido Style */}
+      <div style={{ padding: '4rem 2rem 6rem', background: '#F9FAFB', position: 'relative', overflow: 'hidden' }}>
+        {/* Subtle Map Background Pattern */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.05, backgroundImage: 'url("https://www.transparenttextures.com/patterns/pinstriped-suit.png")' }}></div>
+
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1, animation: 'fadeIn 0.6s ease-out' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'white', padding: '0.5rem 1rem', borderRadius: '100px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', marginBottom: '1.5rem', border: '1px solid #E5E7EB' }}>
+             <FaMapMarkerAlt color="#EF4444" size={14} />
+             <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#111827' }}>Smart City Services India</span>
           </div>
-        ) : (
-          <>
-            <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '1.5rem', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
-              Professional Help, On Demand
-            </h1>
-            <p style={{ fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 2.5rem', color: '#e0e7ff', lineHeight: '1.6' }}>
-              Connect securely with top-rated local experts for all your home, office, and municipal maintenance needs.
-            </p>
-            
-            <form onSubmit={handleSearch} style={{ display: 'flex', maxWidth: '600px', margin: '0 auto', position: 'relative', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', borderRadius: '8px', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', background: 'white', paddingLeft: '1.5rem', flex: 1 }}>
-                <FaSearch color="#64748b" size={20} />
+          
+          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', marginBottom: '1rem', color: '#111827', letterSpacing: '-0.04em', lineHeight: '1.1' }}>
+            Book Experts in <span style={{ background: 'var(--primary)', padding: '0 0.5rem', borderRadius: '8px' }}>Real-Time</span>
+          </h1>
+          <p style={{ fontSize: '1.25rem', color: '#4B5563', marginBottom: '3rem', fontWeight: '500' }}>
+            The fastest way to get verified professionals for any repair or installation.
+          </p>
+
+          <form onSubmit={handleSearch} style={{ display: 'flex', background: 'white', padding: '0.5rem', borderRadius: '24px', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)', border: '1px solid #E5E7EB', maxWidth: '650px', margin: '0 auto' }}>
+             <div style={{ display: 'flex', alignItems: 'center', flex: 1, padding: '0 1rem' }}>
+                <FaSearch color="#9CA3AF" />
                 <input 
                   type="text" 
-                  placeholder="What service do you need? (e.g., Plumber)" 
+                  placeholder="Need an Electrician? Search here..." 
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  style={{ width: '100%', padding: '1.25rem', border: 'none', fontSize: '1.1rem', outline: 'none', color: '#1e293b' }}
+                  style={{ border: 'none', padding: '1rem', fontSize: '1.1rem', width: '100%', outline: 'none', fontWeight: '600' }}
                 />
-              </div>
-              <button type="submit" style={{ background: '#10b981', color: 'white', border: 'none', padding: '0 2rem', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer', transition: 'background 0.2s' }}>
-                Find Expert
-              </button>
-            </form>
-
-            {!user && (
-              <div style={{ marginTop: '2.5rem', fontSize: '1rem', color: '#c7d2fe' }}>
-                Are you a professional looking for work? <Link to="/register" style={{ color: 'white', fontWeight: 'bold', textDecoration: 'underline' }}>Join our network</Link>
-              </div>
-            )}
-          </>
-        )}
+             </div>
+             <button type="submit" className="btn" style={{ borderRadius: '18px', padding: '0 2rem' }}>Check Availability</button>
+          </form>
+        </div>
       </div>
 
-      {/* Trust Signals */}
-      <div style={{ background: 'white', padding: '3rem 2rem', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', textAlign: 'center' }}>
-          {stats.map((s, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{ background: '#f1f5f9', padding: '1rem', borderRadius: '50%' }}>{s.icon}</div>
-              <strong style={{ fontSize: '1.5rem', color: '#0f172a' }}>{s.value}</strong>
-              <span style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>{s.label}</span>
+      {/* Service Grid - Rapido Category Style */}
+      <div style={{ maxWidth: '1000px', margin: '-4rem auto 4rem', padding: '0 2rem', position: 'relative', zIndex: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1.5rem', background: 'white', padding: '2rem', borderRadius: '32px', boxShadow: '0 10px 30px rgba(0,0,0,0.08)', border: '1px solid #F3F4F6' }}>
+          {services.map((s, i) => (
+            <div 
+              key={i} 
+              onClick={() => navigate(s.name === 'All Services' ? '/workers' : `/workers?category=${encodeURIComponent(s.name)}`)}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', cursor: 'pointer', transition: 'all 0.2s ease' }}
+              onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              <div style={{ width: '80px', height: '80px', background: s.color, borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.75rem', color: s.iconColor, boxShadow: `0 8px 16px ${s.color}66` }}>
+                {s.icon}
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <h3 style={{ fontSize: '0.95rem', fontWeight: '800', color: '#111827', margin: 0 }}>{s.name}</h3>
+                <span style={{ fontSize: '0.75rem', color: '#6B7280', fontWeight: '600' }}>{s.pros}</span>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Services Grid */}
-      <div style={{ maxWidth: '1200px', margin: '4rem auto', padding: '0 2rem', flex: 1 }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2.25rem', color: '#1e293b' }}>Popular Services</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          {services.map((service, idx) => (
-            <div key={idx} style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px rgba(0,0,0,0.02)', transition: 'transform 0.2s', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'} onClick={() => navigate(`/workers?category=${encodeURIComponent(service.name)}`)}>
-               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                 <h3 style={{ fontSize: '1.25rem', margin: 0, color: '#0f172a' }}>{service.name}</h3>
-                 <span style={{ background: '#dcfce7', color: '#166534', padding: '0.2rem 0.6rem', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold' }}>Active</span>
+      {/* Trust & Stats Section */}
+      <div style={{ background: '#000000', color: 'white', padding: '6rem 2rem', borderTop: '1px solid #111827' }}>
+         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+               <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem' }}>India's Trusted Service Network</h2>
+               <p style={{ color: '#9CA3AF', fontSize: '1.1rem' }}>Connecting 15,000+ verified captains with millions of smart citizens.</p>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem' }}>
+               <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: 'var(--primary)', fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>15k+</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>Verified Captains</div>
                </div>
-               <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.9rem', marginBottom: '0.5rem' }}><FaUserCheck color="#10b981"/> {service.pros}</p>
-               <p style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.9rem' }}><FaBriefcase color="#8b5cf6"/> {service.rate}</p>
+               <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: 'var(--primary)', fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>4.9/5</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>Rider Satisfaction</div>
+               </div>
+               <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: 'var(--primary)', fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>250k+</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>Orders Delivered</div>
+               </div>
+               <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: 'var(--primary)', fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>24/7</div>
+                  <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>Customer Support</div>
+               </div>
             </div>
-          ))}
-        </div>
-        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-           <Link to="/workers" className="btn btn-outline" style={{ padding: '1rem 3rem', fontSize: '1.1rem', borderRadius: '8px' }}>Explore All Categories</Link>
-        </div>
+         </div>
       </div>
 
       {/* Footer */}
-      <footer style={{ background: '#0f172a', color: '#cbd5e1', padding: '4rem 2rem 2rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+      <footer style={{ background: '#000000', color: '#6B7280', padding: '4rem 2rem 2rem', borderTop: '1px solid #111827' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '4rem' }}>
           <div>
-            <h4 style={{ color: 'white', fontSize: '1.25rem', marginBottom: '1.25rem' }}>Smart City Services</h4>
-            <p style={{ lineHeight: '1.6', fontSize: '0.9rem' }}>The premier municipal and residential service network connecting verified professionals with urgent logistical demands globally.</p>
+            <div className="navbar-brand" style={{ color: 'white', marginBottom: '1.5rem' }}>
+               <span>CITY</span> SERVICES
+            </div>
+            <p style={{ lineHeight: '1.6', fontSize: '0.95rem' }}>The premier municipal and residential service network connecting verified professionals with urgent logistical demands globally.</p>
           </div>
           <div>
-            <strong style={{ color: 'white', display: 'block', marginBottom: '1.25rem' }}>Platform</strong>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-              <li><Link to="/workers" style={{ color: '#cbd5e1', textDecoration: 'none' }}>Find Professionals</Link></li>
-              <li><Link to="/register" style={{ color: '#cbd5e1', textDecoration: 'none' }}>Join our Network</Link></li>
-              <li><Link to="/login" style={{ color: '#cbd5e1', textDecoration: 'none' }}>Contractor Login</Link></li>
+            <h4 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: '700' }}>Platform</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.95rem' }}>
+              <li><Link to="/workers" style={{ color: '#6B7280', textDecoration: 'none' }}>Find Professionals</Link></li>
+              <li><Link to="/register" style={{ color: '#6B7280', textDecoration: 'none' }}>Join our Network</Link></li>
+              <li><Link to="/login" style={{ color: '#6B7280', textDecoration: 'none' }}>Captain Login</Link></li>
             </ul>
           </div>
           <div>
-            <strong style={{ color: 'white', display: 'block', marginBottom: '1.25rem' }}>Legal & Security</strong>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-              <li style={{ cursor: 'pointer' }}>Terms of Service</li>
-              <li style={{ cursor: 'pointer' }}>Privacy Policy</li>
-              <li style={{ cursor: 'pointer' }}>Escrow Parameters</li>
-              <li style={{ cursor: 'pointer' }}>Audited Metrics</li>
+            <h4 style={{ color: 'white', marginBottom: '1.5rem', fontWeight: '700' }}>Safety</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.95rem' }}>
+              <li>Terms of Service</li>
+              <li>Privacy Policy</li>
+              <li>Security Parameters</li>
+              <li>Report Incident</li>
             </ul>
           </div>
         </div>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '1.5rem', borderTop: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.85rem' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingTop: '2rem', borderTop: '1px solid #111827', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', fontSize: '0.85rem' }}>
           <span>&copy; {new Date().getFullYear()} Smart City Services. All rights strictly reserved.</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Protected by 256-bit TLS Encryption <FaShieldAlt color="#10b981" /></span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Protected by 256-bit TLS Encryption <FaShieldAlt color="#10B981" /></span>
         </div>
       </footer>
     </div>

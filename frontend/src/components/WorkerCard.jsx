@@ -1,48 +1,64 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaMapMarkerAlt, FaStar, FaShieldAlt, FaBriefcase, FaUserCheck } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaStar, FaShieldAlt, FaBriefcase, FaUserCheck, FaChevronRight } from 'react-icons/fa';
 
 function WorkerCard({ worker }) {
-  const isNearest = worker.matchScore && worker.matchScore > 50 && worker.location; 
+  const isNearest = worker.distance && parseFloat(worker.distance) < 5; 
 
   return (
-    <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', borderTop: isNearest ? '4px solid var(--primary)' : '1px solid var(--border)', overflow: 'hidden' }}>
-      {isNearest && <div style={{ alignSelf: 'flex-start', background: '#ecfdf5', color: '#059669', padding: '0.4rem 1rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '1rem', border: '1.5px solid #10b981', boxShadow: '0 2px 4px rgba(16,185,129,0.1)' }}>⭐ Algorithm: Best Contextual Match</div>}
+    <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden', padding: '1.25rem', gap: '1rem' }}>
       
-      <div style={{ marginBottom: '1rem', marginTop: '0.25rem' }}>
-        <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', fontSize: '1.25rem' }}>
-          {worker.name}
-          {worker.verification_status === 'Verified' && <FaUserCheck color="#10b981" title="Verified User" />}
-        </h3>
-        <p className="card-subtitle" style={{ color: '#1e293b', fontSize: '0.95rem', fontWeight: '700', letterSpacing: '0.01em' }}>{worker.category}</p>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.5rem', flex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text)' }}>
-          <FaStar color="#f59e0b" size={16} /> <strong style={{ fontSize: '1.1rem' }}>{worker.averageRating || 'New'}</strong> 
-          <span style={{ color: 'var(--text-light)', fontSize: '0.85rem' }}>({worker.total_jobs || 0} jobs)</span>
+      {isNearest && (
+        <div style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#FFD800', color: '#000000', padding: '0.25rem 0.75rem', borderRadius: '100px', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.25rem', boxShadow: '0 4px 10px rgba(255,216,0,0.3)' }}>
+           <FaMapMarkerAlt size={10} /> Nearest Pro
         </div>
-        
-        <div style={{ height: '1px', background: 'var(--border)', margin: '0.25rem 0', opacity: 0.5 }}></div>
+      )}
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: 'var(--text)', fontSize: '0.95rem' }}>
-          <FaShieldAlt color="#3b82f6" size={16} /> Trust Score: <strong style={{ color: 'var(--primary)' }}>{Number(worker.trust_score).toFixed(0)}/100</strong>
+      <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+        <div style={{ width: '64px', height: '64px', background: '#F3F4F6', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', color: '#6B7280', border: '1px solid #E5E7EB' }}>
+          {worker.name.charAt(0)}
         </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#1f2937', fontSize: '0.95rem', fontWeight: '500' }}>
-          <FaBriefcase color="#8b5cf6" size={16} /> Experience: <strong style={{ color: '#111827' }}>{worker.experience} yrs</strong>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#1f2937', fontSize: '0.95rem', fontWeight: '500' }}>
-          <FaMapMarkerAlt color="#ef4444" size={16} /> 
-          <span style={{ color: '#111827', fontWeight: '600' }}>
-            {worker.location || 'Remote / Anywhere'} 
-            {worker.distance && <span style={{ color: '#10b981', marginLeft: '0.5rem' }}>({worker.distance} km away)</span>}
-          </span>
+        <div>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            {worker.name}
+            {worker.verification_status === 'Verified' && <FaUserCheck color="#10B981" size={16} />}
+          </h3>
+          <p style={{ color: '#6B7280', fontSize: '0.85rem', fontWeight: '600' }}>{worker.category}</p>
         </div>
       </div>
 
-      <Link to={`/worker/${worker.id}`} className="btn" style={{ textAlign: 'center', width: '100%', borderRadius: '8px', fontWeight: '900', padding: '0.85rem', color: 'white', background: 'var(--primary)', boxShadow: '0 4px 12px rgba(79, 70, 229, 0.2)', fontSize: '1rem' }}>View Profile</Link>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', background: '#F9FAFB', padding: '1rem', borderRadius: '16px', border: '1px solid #F3F4F6' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', textTransform: 'uppercase' }}>Rating</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: '800' }}>
+            <FaStar color="#F59E0B" /> {worker.averageRating || '4.0'}
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#9CA3AF', textTransform: 'uppercase' }}>Jobs</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: '800' }}>
+            <FaBriefcase color="#8B5CF6" /> {worker.total_jobs || 0}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+           <FaShieldAlt color="#10B981" />
+           <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#4B5563' }}>Trust Score: <strong style={{ color: '#000' }}>{Number(worker.trust_score).toFixed(0)}%</strong></span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+           <FaMapMarkerAlt color="#EF4444" />
+           <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#4B5563' }}>
+              {worker.location}
+              {worker.distance && <span style={{ color: '#10B981', marginLeft: '0.4rem' }}>({worker.distance} km)</span>}
+           </span>
+        </div>
+      </div>
+
+      <Link to={`/worker/${worker.id}`} className="btn" style={{ width: '100%', justifyContent: 'space-between', padding: '0.85rem 1.25rem' }}>
+        View Details <FaChevronRight size={14} />
+      </Link>
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaUserCircle, FaSignOutAlt, FaMapMarkerAlt } from 'react-icons/fa';
 
 function Navbar() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -13,25 +14,47 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">Smart City Services</Link>
-      <div className="navbar-links">
-        {user ? (
-          <div className="navbar-user">
-            <Link to="/profile" title="Profile Settings" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--primary), #8b5cf6)', color: 'white', fontWeight: 'bold', fontSize: '1.2rem', textDecoration: 'none', boxShadow: '0 3px 8px rgba(59,130,246,0.25)', marginRight: '0.75rem', border: '2px solid white' }}>
-              {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-            </Link>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
-               <strong style={{ fontSize: '0.90rem', color: 'var(--text)' }}>{user?.name?.split(' ')[0]}</strong>
-               <button onClick={handleLogout} style={{ padding: 0, width: 'auto', background: 'transparent', border: 'none', color: '#dc2626', fontSize: '0.75rem', cursor: 'pointer', textAlign: 'left', fontWeight: '900', textTransform: 'uppercase', marginTop: '0.1rem' }}>Terminate Session</button>
-            </div>
+      <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '0' }}>
+        <Link to="/" className="navbar-brand">
+          <FaMapMarkerAlt /> <span>CITY</span> SERVICES
+        </Link>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          <div className="navbar-links" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+            <Link to="/workers" style={{ color: '#000', fontWeight: '800', fontSize: '0.95rem' }}>Discover</Link>
+            {!user && (
+              <>
+                <Link to="/login" style={{ color: '#4B5563', fontWeight: '700', fontSize: '0.95rem' }}>Login</Link>
+                <Link to="/register" className="btn" style={{ padding: '0.6rem 1.25rem', fontSize: '0.9rem' }}>Join Now</Link>
+              </>
+            )}
           </div>
-        ) : (
-          <>
-            <Link to="/workers" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginRight: '1rem', padding: '0.6rem 1.5rem', width: 'auto', border: '2px solid var(--primary)', color: 'var(--primary)', fontWeight: 'bold', height: '44px', boxSizing: 'border-box' }}>Find Professionals</Link>
-            <Link to="/login" style={{ marginRight: '1.5rem', fontWeight: 'bold', color: 'var(--text-light)', textDecoration: 'none' }}>Log In</Link>
-            <Link to="/register" className="btn" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.6rem 1.5rem', width: 'auto', background: 'var(--primary)', color: 'white', fontWeight: 'bold', height: '44px', boxSizing: 'border-box', boxShadow: '0 4px 10px rgba(79,70,229,0.2)' }}>Sign Up Free</Link>
-          </>
-        )}
+
+          {user && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '1px solid #E5E7EB', paddingLeft: '1.5rem' }}>
+              <div 
+                onClick={() => navigate(user.role === 'Admin' ? '/dashboard/admin' : user.role === 'Worker' ? '/dashboard/worker' : '/dashboard/customer')}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
+              >
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.85rem', fontWeight: '800', color: '#111827' }}>{user.name}</div>
+                  <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#6B7280', textTransform: 'uppercase' }}>{user.role} Dashboard</div>
+                </div>
+                <FaUserCircle size={32} color="#D1D5DB" />
+              </div>
+              
+              <button 
+                onClick={handleLogout}
+                style={{ background: '#F3F4F6', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+                title="Logout"
+                onMouseOver={e => e.currentTarget.style.background = '#FEE2E2'}
+                onMouseOut={e => e.currentTarget.style.background = '#F3F4F6'}
+              >
+                <FaSignOutAlt color="#6B7280" />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

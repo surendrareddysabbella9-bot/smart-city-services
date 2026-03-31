@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
-import { FaSearch, FaFilter, FaMapMarkerAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaSearch, FaFilter, FaMapMarkerAlt, FaStar, FaTimes } from 'react-icons/fa';
 import api from '../services/api';
 import WorkerCard from '../components/WorkerCard';
 import useLocation from '../hooks/useLocation';
@@ -10,6 +10,7 @@ function WorkerListing() {
   const [filter, setFilter] = useState('');
   const [search, setSearch] = useState('');
   const [minRating, setMinRating] = useState('');
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || 'null');
   const { location, error: locError, loading: locLoading } = useLocation();
   
@@ -27,98 +28,113 @@ function WorkerListing() {
     refetchOnWindowFocus: true
   });
 
+  const categories = ['Electrician', 'Plumber', 'Painter', 'Maintenance Worker', 'Construction Worker'];
+
   return (
-    <div className="container" style={{ padding: '3rem 4rem' }}>
-      <div style={{ marginBottom: '2rem', fontSize: '0.95rem', color: '#1e293b', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-         <span style={{ cursor: 'pointer', borderBottom: '2px solid transparent' }} onClick={() => window.history.back()}>{user ? 'Dashboard Workspace' : 'Public Marketplace'}</span> <span style={{ margin: '0 0.5rem', color: '#cbd5e1' }}>/</span> <strong style={{ color: 'var(--primary)', borderBottom: '2px solid var(--primary)' }}>Discover Global Professionals</strong>
+    <div style={{ background: '#F9FAFB', minHeight: '100vh', paddingBottom: '4rem' }}>
+      {/* Header / Search Area */}
+      <div style={{ background: 'white', borderBottom: '1px solid #E5E7EB', padding: '2rem 0' }}>
+        <div className="container">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', fontWeight: '700', color: '#6B7280', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
+             <span style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>Home</span> 
+             <span>/</span> 
+             <span style={{ color: '#111827' }}>Discover Captains</span>
+          </div>
+
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111827', marginBottom: '2rem', letterSpacing: '-0.03em' }}>Available Captains</h1>
+
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: '300px', position: 'relative' }}>
+               <FaSearch style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+               <input 
+                 type="text" 
+                 placeholder="Search by name or skill..." 
+                 value={search}
+                 onChange={(e) => setSearch(e.target.value)}
+                 style={{ width: '100%', padding: '1rem 1rem 1rem 3rem', borderRadius: '16px', border: '2px solid #F3F4F6', background: '#F9FAFB', outline: 'none', fontWeight: '600', fontSize: '1rem' }}
+               />
+            </div>
+            
+            <div style={{ display: 'flex', gap: '0.75rem', overflowX: 'auto', paddingBottom: '0.5rem', width: '100%' }}>
+               <button 
+                 onClick={() => setFilter('')}
+                 style={{ padding: '0.6rem 1.25rem', borderRadius: '100px', border: 'none', background: filter === '' ? '#000' : 'white', color: filter === '' ? 'white' : '#4B5563', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer', border: '1px solid #E5E7EB', whiteSpace: 'nowrap' }}
+               >
+                 All
+               </button>
+               {categories.map(cat => (
+                 <button 
+                   key={cat}
+                   onClick={() => setFilter(cat)}
+                   style={{ padding: '0.6rem 1.25rem', borderRadius: '100px', border: 'none', background: filter === cat ? '#000' : 'white', color: filter === cat ? 'white' : '#4B5563', fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer', border: '1px solid #E5E7EB', whiteSpace: 'nowrap' }}
+                 >
+                   {cat}
+                 </button>
+               ))}
+            </div>
+          </div>
+
+          <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: location.lat ? '#10B981' : '#6B7280', fontSize: '0.9rem', fontWeight: '600' }}>
+                <FaMapMarkerAlt /> 
+                {locLoading ? 'Locating...' : location.lat ? 'Showing nearby Captains first' : 'Location disabled'}
+             </div>
+
+             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <select 
+                  value={minRating} 
+                  onChange={(e) => setMinRating(e.target.value)}
+                  style={{ padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #E5E7EB', fontWeight: '700', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="">Any Rating</option>
+                  <option value="4.5">4.5+ Stars</option>
+                  <option value="4.0">4.0+ Stars</option>
+                  <option value="3.0">3.0+ Stars</option>
+                </select>
+
+                {(filter || search || minRating) && (
+                  <button 
+                    onClick={() => { setFilter(''); setSearch(''); setMinRating(''); }}
+                    style={{ background: 'none', border: 'none', color: '#EF4444', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                  >
+                    <FaTimes /> Reset
+                  </button>
+                )}
+             </div>
+          </div>
+        </div>
       </div>
 
-      <header style={{ marginBottom: '3.5rem', textAlign: 'left' }}>
-        <h1 className="dashboard-title" style={{ margin: 0, fontSize: '3rem', fontWeight: '900', color: '#0f172a', letterSpacing: '-0.04em' }}>Discover Professionals</h1>
-        <p style={{ color: '#475569', marginTop: '0.75rem', fontSize: '1.2rem', fontWeight: '500', maxWidth: '700px', lineHeight: '1.6' }}>Access the inner sanctum of verified city service providers across all critical urban sectors.</p>
-        
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.08)', marginTop: '2.5rem', flexWrap: 'nowrap', overflowX: 'auto' }}>
-          <div style={{ position: 'relative', flex: 3, minWidth: '350px' }}>
-            <FaSearch style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
-            <input 
-              type="text" 
-              placeholder="Search by name (e.g. Anil)..." 
-              value={search} 
-              onChange={(e) => setSearch(e.target.value)}
-              style={{ paddingLeft: '3.75rem', paddingRight: '1rem', height: '52px', width: '100%', border: '2px solid #f1f5f9', borderRadius: '12px', fontSize: '1.05rem', background: '#f8fafc', fontWeight: '500', outline: 'none' }}
-            />
+      {/* Main Content */}
+      <div className="container" style={{ marginTop: '2rem' }}>
+        {isLoading ? (
+          <div className="grid">
+            {[1,2,3,4,5,6].map(i => (
+              <div key={i} className="card" style={{ height: '320px', background: 'white', opacity: 0.6 }}></div>
+            ))}
           </div>
-          
-          <select value={filter} onChange={(e) => setFilter(e.target.value)} style={{ flex: 1, padding: '0 1rem', height: '52px', border: '2px solid #f1f5f9', borderRadius: '12px', minWidth: '180px', fontSize: '1rem', background: '#f8fafc', fontWeight: '800', color: '#1e293b', cursor: 'pointer' }}>
-            <option value="">All Categories</option>
-            <option value="Electrician">Electrician</option>
-            <option value="Plumber">Plumber</option>
-            <option value="Painter">Painter</option>
-            <option value="Maintenance Worker">Maintenance Worker</option>
-          </select>
-
-          <select value={minRating} onChange={(e) => setMinRating(e.target.value)} style={{ flex: 1, padding: '0 1rem', height: '52px', border: '2px solid #f1f5f9', borderRadius: '12px', minWidth: '160px', fontSize: '1rem', background: '#f8fafc', fontWeight: '800', color: '#1e293b', cursor: 'pointer' }}>
-            <option value="">Any Rating</option>
-            <option value="4.5">4.5+ Stars</option>
-            <option value="4.0">4.0+ Stars</option>
-            <option value="3.0">3.0+ Stars</option>
-          </select>
-
-          <button className="btn" style={{ height: '52px', padding: '0 2.5rem', fontWeight: '900', borderRadius: '12px', fontSize: '1.1rem', minWidth: '160px', background: 'var(--primary)', color: 'white', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Search</button>
-
-          {(filter || search || minRating) && (
-            <button 
-              onClick={() => { setFilter(''); setSearch(''); setMinRating(''); }} 
-              style={{ background: 'transparent', border: 'none', color: '#dc2626', fontWeight: '900', cursor: 'pointer', fontSize: '0.9rem', padding: '0 0.5rem', textTransform: 'uppercase' }}
-            >
-              Reset
-            </button>
-          )}
-        </div>
-
-        <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: location.lat ? '#10b981' : '#64748b' }}>
-          <FaMapMarkerAlt size={14} />
-          {locLoading ? (
-            <span>Detecting your location...</span>
-          ) : locError ? (
-            <span style={{ color: '#ef4444' }}>Location access denied. Sort by distance disabled.</span>
-          ) : location.lat ? (
-            <span>Nearby workers enabled. Sorted by proximity.</span>
-          ) : (
-            <span>Location unavailable.</span>
-          )}
-        </div>
-      </header>
-
-      {isLoading ? (
-        <div className="grid">
-          {[1,2,3,4,5,6].map(i => (
-             <div key={i} className="card" style={{ height: '300px', background: '#f8fafc', animation: 'pulse 1.5s infinite', border: '1px dashed #cbd5e1' }}></div>
-          ))}
-        </div>
-      ) : isError ? (
-        <div style={{ padding: '2rem', textAlign: 'center', color: '#dc2626', background: '#fee2e2', borderRadius: '8px', border: '1px solid #f87171' }}>
-          Failed to load worker profiles. Please try again.
-        </div>
-      ) : (data?.filter(w => w.user_id !== user?.id && (!minRating || Number(w.averageRating || 0) >= Number(minRating))) || []).length > 0 ? (
-        <div className="grid">
-          {data.filter(w => w.user_id !== user?.id && (!minRating || Number(w.averageRating || 0) >= Number(minRating))).map(worker => (
-            <WorkerCard key={worker.id} worker={worker} />
-          ))}
-        </div>
-      ) : (
-        <div style={{ padding: '5rem 2rem', textAlign: 'center', background: 'white', borderRadius: '16px', border: '2px dashed #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-          <FaFilter size={64} color="#94a3b8" style={{ marginBottom: '1.5rem', opacity: 0.8 }} />
-          <h2 style={{ color: '#1e293b', marginBottom: '1rem' }}>No Professionals Detected in this Scope</h2>
-          <p style={{ color: '#475569', fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto 2rem auto', lineHeight: '1.6' }}>We're currently scaling our verified worker pool. Adjust your search criteria or register as a partner to be the first in your area.</p>
-          {!user && (
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-               <Link to="/register" className="btn" style={{ padding: '0.85rem 2rem' }}>Become a Verified Worker</Link>
-               <button onClick={() => { setFilter(''); setSearch(''); setMinRating(''); }} className="btn btn-outline" style={{ padding: '0.85rem 2rem' }}>View Global Directory</button>
-            </div>
-          )}
-        </div>
-      )}
+        ) : isError ? (
+          <div style={{ textAlign: 'center', padding: '4rem', background: 'white', borderRadius: '24px', border: '1px solid #FEE2E2', color: '#EF4444' }}>
+             <h3 style={{ fontWeight: '800' }}>System Interruption Detected</h3>
+             <p>Unable to sync with Captain fleet. Please refresh.</p>
+          </div>
+        ) : (data && data.length > 0) ? (
+          <div className="grid">
+            {data.filter(w => w.user_id !== user?.id && (!minRating || Number(w.averageRating || 0) >= Number(minRating))).map(worker => (
+              <WorkerCard key={worker.id} worker={worker} />
+            ))}
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '6rem 2rem', background: 'white', borderRadius: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+             <div style={{ width: '80px', height: '80px', background: '#F3F4F6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+                <FaFilter size={32} color="#9CA3AF" />
+             </div>
+             <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827', marginBottom: '1rem' }}>No Captains in this Scope</h2>
+             <p style={{ color: '#6B7280', fontSize: '1.1rem', maxWidth: '500px', margin: '0 auto 2rem' }}>Adjust your filters or try a different service category. We are constantly onboarding new verified professionals.</p>
+             <button className="btn" onClick={() => { setFilter(''); setSearch(''); setMinRating(''); }}>Clear All Filters</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
