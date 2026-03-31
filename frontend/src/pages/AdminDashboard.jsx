@@ -88,6 +88,11 @@ function AdminDashboard() {
 
   const activeFlagged = flaggedWorkers.filter(w => !dismissedIds.includes(w.id));
 
+  const filteredUsers = users.filter(u => 
+    (u.email || '').toLowerCase().includes(search.toLowerCase()) || 
+    (u.role || '').toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="container" style={{ padding: '2rem' }}>
       <div className="dashboard-header" style={{ marginBottom: '3rem' }}>
